@@ -1,0 +1,62 @@
+import random
+
+# Game variables
+player_location = "start"
+inventory = []
+
+# Game map
+game_map = {
+    "start": {"description": "You are at the entrance of a dark forest. You see a path leading deeper into the woods.",
+              "paths": {"north": "clearing", "east": "cave"}},
+    "clearing": {"description": "You are in a peaceful clearing. Birds are chirping around you.",
+                 "paths": {"south": "start", "east": "lake"}},
+    "cave": {"description": "You have entered a spooky cave. It's dark and damp.",
+             "paths": {"west": "start"}},
+    "lake": {"description": "You have reached a beautiful lake. The water is crystal clear.",
+             "paths": {"west": "clearing"}}
+}
+
+# Game functions
+def display_location():
+    print("\n" + game_map[player_location]["description"])
+    print("Exits:", ", ".join(game_map[player_location]["paths"].keys()))
+
+def move(direction):
+    global player_location
+    if direction in game_map[player_location]["paths"]:
+        player_location = game_map[player_location]["paths"][direction]
+        display_location()
+    else:
+        print("You can't go that way.")
+
+def explore():
+    if player_location == "cave":
+        print("You found a treasure chest in the cave!")
+        if "treasure" not in inventory:
+            print("You obtained the treasure!")
+            inventory.append("treasure")
+        else:
+            print("But the chest is empty.")
+    else:
+        print("You didn't find anything interesting.")
+
+def play_game():
+    print("Welcome to Lost in the Forest!")
+    print("Can you find your way out of the forest?")
+    display_location()
+    
+    while True:
+        action = input("What would you like to do? (move/explore/quit): ").lower()
+        if action == "quit":
+            print("Thanks for playing!")
+            break
+        elif action == "move":
+            direction = input("Which direction would you like to move? (north/south/east/west): ").lower()
+            move(direction)
+        elif action == "explore":
+            explore()
+        else:
+            print("Invalid action. Please choose move, explore, or quit.")
+
+if __name__ == "__main__":
+    play_game()
